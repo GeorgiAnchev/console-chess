@@ -1,9 +1,5 @@
 ﻿using Chess.Pieces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chess
 {
@@ -11,6 +7,11 @@ namespace Chess
     {
         public const int boardSize = 8;
         private Piece[,] board;
+        public Player PlayerOnTurn
+        {
+            get;
+            private set;
+        }
 
         public Board()
         {
@@ -43,6 +44,44 @@ namespace Chess
             }
         }
 
+        public MoveOutcome TryMove(int oldRow, int oldCol, int newRow, int newCol)
+        {
+            Piece piece = board[oldRow, oldCol];
+            
+            //No such piece or other player's piece
+            if (piece == null || piece.Player != PlayerOnTurn)
+            {
+                return MoveOutcome.Illegal;
+            }
+
+            Piece targetPiece = board[newRow, newCol];
+
+            //Can't take your own piece
+            if (targetPiece != null && targetPiece.Player == PlayerOnTurn)
+            {
+                return MoveOutcome.Illegal;
+            }
+
+
+
+            board[newRow, newCol] = piece;
+            board[oldRow, oldCol] = null;
+
+            return MoveOutcome.Success;
+        }
+
+        public void ChangeTurns()
+        {
+            if (PlayerOnTurn == Player.White)
+            {
+                PlayerOnTurn = Player.Black;
+            }
+            else
+            {
+                PlayerOnTurn = Player.White;
+            }
+        }
+
         public Piece this[int row, int col]
         {
             get { return board[row, col]; }
@@ -52,29 +91,43 @@ namespace Chess
         public void Print()
         {
             Console.WriteLine();
-            Console.WriteLine();
+            Console.WriteLine("    0  1  2  3  4  5  6  7");
 
             for (int i = 0; i < boardSize; i++)
             {
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write($" {i} ");
+
                 for (int j = 0; j < boardSize; j++)
                 {
-                    if ((i + j) % 2 == 0) Console.BackgroundColor = ConsoleColor.Yellow;
+                    if ((i + j) % 2 == 0) Console.BackgroundColor = ConsoleColor.Gray;
                     else Console.BackgroundColor = ConsoleColor.DarkYellow;
 
                     if(board[i, j] != null)
                     {
-                        if (board[i, j].Player == Player.White) Console.ForegroundColor = ConsoleColor.Green;
+                        if (board[i, j].Player == Player.White) Console.ForegroundColor = ConsoleColor.White;
                         else Console.ForegroundColor = ConsoleColor.Black;
 
-                        Console.Write(board[i, j]);
+                        Console.Write($" {board[i, j]} ");
                     }
                     else
                     {
-                        Console.Write(' ');
+                        Console.Write("   ");
                     }
                 }
                 Console.WriteLine();
             }
+
+            Console.BackgroundColor = ConsoleColor.Black;
         }
+    }
+
+    public enum MoveOutcome
+    {
+        Success,
+        WhiteWins,
+        BlackWins,
+        Illegal
     }
 }
