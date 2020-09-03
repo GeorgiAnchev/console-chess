@@ -81,6 +81,29 @@ namespace Chess
             return MoveOutcome.Success;
         }
 
+        public MoveOutcome TryTake(int oldRow, int oldCol, int newRow, int newCol)
+        {
+            if (newRow < 0 || newCol < 0 || newRow > 7 || newCol > 7)
+            {
+                return MoveOutcome.Illegal;
+            }
+
+            Piece currentPiece = board[oldRow, oldCol];
+
+            if (currentPiece.CanAttackPosition(oldRow, oldCol, newRow, newCol, this))
+            {
+                //move the piece
+                board[newRow, newCol] = currentPiece;
+                board[oldRow, oldCol] = null;
+            }
+            else
+            {
+                return MoveOutcome.Illegal;
+            }
+
+            return MoveOutcome.Success;
+        }
+
         public void ChangeTurns()
         {
             if (PlayerOnTurn == Player.White)

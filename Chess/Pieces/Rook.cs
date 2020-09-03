@@ -13,6 +13,11 @@ namespace Chess.Pieces
             DisplayCharacter = 'R';
         }
 
+        public override bool CanAttackPosition(int oldRow, int oldCol, int newRow, int newCol, Board board)
+        {
+            return CanMoveTo(oldRow, oldCol, newRow, newCol, board);
+        }
+
         public override bool CanMoveTo(int oldRow, int oldCol, int newRow, int newCol, Board board)
         {
             int deltaRow = Math.Abs(newRow - oldRow);

@@ -13,28 +13,33 @@ namespace Chess.Pieces
             DisplayCharacter = 'Q';
         }
 
+        public override bool CanAttackPosition(int oldRow, int oldCol, int newRow, int newCol, Board board)
+        {
+            return CanMoveTo(oldRow, oldCol, newRow, newCol, board);
+        }
+
         public override bool CanMoveTo(int oldRow, int oldCol, int newRow, int newCol, Board board)
         {
             int deltaRow = Math.Abs(newRow - oldRow);
             int deltaCol = Math.Abs(newCol - oldCol);
-            bool positionIsLegal = false;
+            bool isPositionLegal = false;
 
             if (deltaCol == deltaRow)//move diagonally
             {
-                positionIsLegal = true;
+                isPositionLegal = true;
             }
 
             if (deltaRow == 0 && deltaCol != 0)//move up or down
             {
-                positionIsLegal = true;
+                isPositionLegal = true;
             }
 
             if (deltaRow != 0 && deltaCol == 0)//move left or right
             {
-                positionIsLegal = true;
+                isPositionLegal = true;
             }
 
-            if (positionIsLegal == false)
+            if (isPositionLegal == false)
             {
                 return false;
             }

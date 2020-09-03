@@ -26,6 +26,8 @@ namespace Chess
         
         public abstract bool CanMoveTo(int oldRow, int oldCol, int newRow, int newCol, Board board);
 
+        public abstract bool CanAttackPosition(int oldRow, int oldCol, int newRow, int newCol, Board board);
+
         public override string ToString()
         {
             return DisplayCharacter.ToString();

@@ -31,7 +31,24 @@ namespace Chess
                 int newRow = int.Parse(input[0]);
                 int newCol = int.Parse(input[1]);
 
-                MoveOutcome result = Board.TryMove(oldRow, oldCol, newRow, newCol);
+                MoveOutcome result;
+                if (Board[oldRow, oldCol] == null || Board[oldRow, oldCol].Player != Board.PlayerOnTurn)//can only move your own piece
+                {
+                    result = MoveOutcome.Illegal;
+                }
+                else if (Board[newRow, newCol] == null)//try to move the piece on empty
+                {
+                    result = Board.TryMove(oldRow, oldCol, newRow, newCol);
+                }
+                else if(Board[newRow, newCol].Player != Board.PlayerOnTurn)//try to take enemy piece
+                {
+                    result = Board.TryTake(oldRow, oldCol, newRow, newCol);
+                }
+                else//cant take own piece
+                {
+                    result = MoveOutcome.Illegal;
+                }
+
                 if(result == MoveOutcome.BlackWins)
                 {
                     Console.WriteLine("Black wins");
@@ -51,6 +68,7 @@ namespace Chess
                 {
                     Board.ChangeTurns();
                     Console.Clear();
+                    Console.WriteLine("");
                 }
             }
 
