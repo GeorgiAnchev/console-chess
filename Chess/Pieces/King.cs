@@ -28,32 +28,46 @@ namespace Chess.Pieces
                 return false;
             }
 
+            return IsPositionThreatened(newRow, newCol, board);
+        }
+
+        private bool IsPositionThreatened(int newRow, int newCol, Board board)
+        {
             for (int row = 0; row < Board.boardSize; row++)
             {
                 for (int col = 0; col < Board.boardSize; col++)
                 {
                     Piece potentialThreat = board[row, col];
 
-                    if (potentialThreat != null && potentialThreat.Owner != Owner)
+                    if (IsThreatenedBy(potentialThreat, row, col, newRow, newCol, board))
                     {
-                        if (potentialThreat is King)
-                        {
-                            int rowDiffBetweenKings = Math.Abs(row - newRow);
-                            int colDiffBetweenKings = Math.Abs(col - newCol);
-
-                            if (isDistanceSmallEnough(rowDiffBetweenKings, colDiffBetweenKings))
-                            {
-                                return false;
-                            }
-                        }
-                        else if (potentialThreat.CanAttackPosition(row, col, newRow, newCol, board))//enemy piece threatening the king's new position
-                        {
-                            return false;
-                        }
+                        return true;
                     }
                 }
             }
-            return true;
+            return false;
+        }
+
+        private bool IsThreatenedBy(Piece potentialThreat, int currentRow, int currentCol, int newRow, int newCol, Board board)
+        {
+            if (potentialThreat != null && potentialThreat.Owner != Owner)
+            {
+                if (potentialThreat is King)
+                {
+                    int rowDiffBetweenKings = Math.Abs(currentRow - newRow);
+                    int colDiffBetweenKings = Math.Abs(currentCol - newCol);
+
+                    if (isDistanceSmallEnough(rowDiffBetweenKings, colDiffBetweenKings))
+                    {
+                        return true;
+                    }
+                }
+                else if (potentialThreat.CanAttackPosition(currentRow, currentCol, newRow, newCol, board))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private static bool isDistanceSmallEnough(int deltaRow, int deltaCol)
