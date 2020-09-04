@@ -16,11 +16,8 @@ namespace Chess.Pieces
 
         public override bool CanMoveTo(Move move, Board board)
         {
-            int rowDiff = Math.Abs(move.NewRow - move.CurrentRow);
-            int colDiff = Math.Abs(move.NewCol - move.CurrentCol);
-
-            if (!IsOnSameRow(rowDiff, colDiff)
-                && !IsOnSameCol(rowDiff, colDiff))
+            if (!IsOnSameRow(move.RowDiff(), move.ColDiff())
+                && !IsOnSameCol(move.RowDiff(), move.ColDiff()))
             {
                 return false;
             }

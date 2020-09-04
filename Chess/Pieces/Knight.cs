@@ -20,10 +20,8 @@ namespace Chess.Pieces
 
         public override bool CanMoveTo(Move move, Board board)
         {
-            int deltaRow = Math.Abs(move.CurrentRow - move.NewRow);
-            int deltaCol = Math.Abs(move.CurrentCol - move.NewCol);
-
-            return (deltaRow == 1 && deltaCol == 2) || (deltaRow == 2 && deltaCol == 1);
+            return (move.RowDiff == 1 && move.ColDiff == 2) 
+                || (move.RowDiff == 2 && move.ColDiff == 1);
         }
     }
 }

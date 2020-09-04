@@ -11,14 +11,12 @@ namespace Chess.Pieces
 
         public override bool CanAttackPosition(Move move, Board board)
         {
-            int colDiff = Math.Abs(move.NewCol - move.CurrentCol);
-
-            if (Owner == Player.Black && CanAttackDownwards(move.CurrentRow, move.NewRow, colDiff))
+            if (Owner == Player.Black && CanAttackDownwards(move))
             {
                 return true;
             }
 
-            if (Owner == Player.White && CanAttackUpwards(move.CurrentRow, move.NewRow, colDiff))
+            if (Owner == Player.White && CanAttackUpwards(move))
             {
                 return true;
             }
@@ -28,18 +26,16 @@ namespace Chess.Pieces
 
         public override bool CanMoveTo(Move move, Board board)
         {
-            int colDiff = Math.Abs(move.NewCol - move.CurrentCol);
-
             //todo: implement promotion, en passant
             if (Owner == Player.Black
-                && (CanMoveDownwards(move.CurrentRow, move.NewRow, colDiff)
+                && (CanMoveDownwards(move)
                     || CanDoubleMoveDownwards(move, board)))
             {
                 return true;
             }
 
             if (Owner == Player.White
-                && (CanMoveUpwards(move.CurrentRow, move.NewRow, colDiff)
+                && (CanMoveUpwards(move)
                    || CanDoubleMoveUpwards(move, board)))
             {
                 return true;
@@ -48,31 +44,31 @@ namespace Chess.Pieces
             return false;
         }
 
-        private static bool CanAttackUpwards(int currentRow, int newRow, int colDiff)
+        private static bool CanAttackUpwards(Move move)
         {
-            return newRow == currentRow - 1 && colDiff == 1;
+            return move.NewRow == move.CurrentRow - 1 && move.ColDiff == 1;
         }
 
-        private static bool CanAttackDownwards(int currentRow, int newRow, int colDiff)
+        private static bool CanAttackDownwards(Move move)
         {
-            return newRow == currentRow + 1 && colDiff == 1;
+            return move.NewRow == move.CurrentRow + 1 && move.ColDiff == 1;
         }
 
-        private static bool CanMoveUpwards(int currentRow, int newRow, int colDiff)
+        private static bool CanMoveUpwards(Move move)
         {
-            return newRow == currentRow - 1 && colDiff == 0;
+            return move.NewRow == move.CurrentRow - 1 && move.ColDiff == 0;
         }
 
-        private static bool CanMoveDownwards(int currentRow, int newRow, int colDiff)
+        private static bool CanMoveDownwards(Move move)
         {
-            return newRow == currentRow + 1 && colDiff == 0;
+            return move.NewRow == move.CurrentRow + 1 && move.ColDiff == 0;
         }
 
         private static bool CanDoubleMoveUpwards(Move move, Board board)
         {
             return move.CurrentRow == 6
                 && move.NewRow == move.CurrentRow - 2
-                && move.ColDiff() == 0
+                && move.ColDiff == 0
                 && board[move.CurrentRow - 1, move.CurrentCol] == null;
         }
 

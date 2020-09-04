@@ -20,10 +20,7 @@ namespace Chess.Pieces
 
         public override bool CanMoveTo(Move move, Board board)
         {
-            int deltaRow = Math.Abs(move.NewRow - move.CurrentRow);
-            int deltaCol = Math.Abs(move.NewCol - move.CurrentCol);
-
-            if (!isDistanceSmallEnough(deltaRow, deltaCol))
+            if (!isDistanceSmallEnough(move.RowDiff, move.ColDiff))
             {
                 return false;
             }
@@ -55,8 +52,8 @@ namespace Chess.Pieces
             {
                 if (potentialThreat is King)
                 {
-                    int rowDiffBetweenKings = Math.Abs(move.CurrentRow - move.NewRow);//todo: exctract this logic in Move
-                    int colDiffBetweenKings = Math.Abs(move.CurrentCol - move.NewCol);
+                    int rowDiffBetweenKings = move.RowDiff;
+                    int colDiffBetweenKings = move.ColDiff;
 
                     if (isDistanceSmallEnough(rowDiffBetweenKings, colDiffBetweenKings))
                     {

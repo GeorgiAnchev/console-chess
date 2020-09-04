@@ -41,17 +41,12 @@ namespace Chess
 
         protected static bool HasLineOfSight(Move move, Board board)
         {
-            int rowDelta = move.NewRow - move.CurrentRow;
-            int colDelta = move.NewCol - move.CurrentCol;
-
-            int directionRow = Math.Sign(rowDelta);
-            int directionCol = Math.Sign(colDelta);
-            int numberOfSteps = Math.Max(Math.Abs(rowDelta), Math.Abs(colDelta));
+            int numberOfSteps = Math.Max(move.RowDiff, move.ColDiff);
 
             for (int i = 1; i < numberOfSteps; i++)
             {
-                int row = move.CurrentRow + i * directionRow;
-                int col = move.CurrentCol + i * directionCol;
+                int row = move.CurrentRow + i * move.RowDirection;
+                int col = move.CurrentCol + i * move.ColDirection;
 
                 if (board[row, col] != null)
                 {
