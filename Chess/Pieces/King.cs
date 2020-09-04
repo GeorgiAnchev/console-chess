@@ -18,43 +18,47 @@ namespace Chess.Pieces
             return CanMoveTo(oldRow, oldCol, newRow, newCol, board);
         }
 
-        public override bool CanMoveTo(int oldRow, int oldCol, int newRow, int newCol, Board board)
+        public override bool CanMoveTo(int currentRow, int currentCol, int newRow, int newCol, Board board)
         {
-            int deltaRow = Math.Abs(newRow - oldRow);
-            int deltaCol = Math.Abs(newCol - oldCol);
+            int deltaRow = Math.Abs(newRow - currentRow);
+            int deltaCol = Math.Abs(newCol - currentCol);
 
-            if (deltaRow > 1 || deltaCol > 1)//distance is too big
+            if (!isDistanceSmallEnough(deltaRow, deltaCol))
             {
                 return false;
             }
 
-            for (int i = 0; i < Board.boardSize; i++)
+            for (int row = 0; row < Board.boardSize; row++)
             {
-                for (int j = 0; j < Board.boardSize; j++)
+                for (int col = 0; col < Board.boardSize; col++)
                 {
-                    Piece piece = board[i, j];
+                    Piece potentialThreat = board[row, col];
 
-                    //enemy piece 
-                    if (piece!= null && piece.Player != Player) 
+                    if (potentialThreat != null && potentialThreat.Owner != Owner)
                     {
-                        if (piece is King)
+                        if (potentialThreat is King)
                         {
-                            int deltaRowBetweenKings = Math.Abs(i - newRow);
-                            int deltaColBetweenKings = Math.Abs(j - newCol);
+                            int rowDiffBetweenKings = Math.Abs(row - newRow);
+                            int colDiffBetweenKings = Math.Abs(col - newCol);
 
-                            if (deltaRowBetweenKings <= 1 && deltaColBetweenKings  <= 1)//kings threatening eachother
+                            if (isDistanceSmallEnough(rowDiffBetweenKings, colDiffBetweenKings))
                             {
                                 return false;
                             }
                         }
-                        else if (piece.CanAttackPosition(i, j, newRow, newCol, board))//enemy piece threatening the king's new position
-                        { 
+                        else if (potentialThreat.CanAttackPosition(row, col, newRow, newCol, board))//enemy piece threatening the king's new position
+                        {
                             return false;
                         }
                     }
                 }
             }
             return true;
+        }
+
+        private static bool isDistanceSmallEnough(int deltaRow, int deltaCol)
+        {
+            return deltaRow <= 1 && deltaCol <= 1;
         }
     }
 }

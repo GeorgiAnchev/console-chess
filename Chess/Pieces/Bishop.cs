@@ -20,26 +20,16 @@ namespace Chess.Pieces
 
         public override bool CanMoveTo(int oldRow, int oldCol, int newRow, int newCol, Board board)
         {
-            int deltaRow = Math.Abs(newRow - oldRow);
-            int deltaCol = Math.Abs(newCol - oldCol);
+            int rowDifference = Math.Abs(newRow - oldRow);
+            int colDifference = Math.Abs(newCol - oldCol);
 
-            if (deltaCol != deltaRow)//not on the same diagonal
+            if (!IsOnSameDiagonal(rowDifference, colDifference))
             {
                 return false;
             }
 
-            int directionRow = Math.Sign(newRow - oldRow);
-            int directionCol = Math.Sign(newCol - oldCol);
-            int moves = deltaRow; //moves to be made
-
-            for (int i = 1; i < moves; i++)
-            {
-                if (board[oldRow + i*directionRow, oldCol + i*directionCol] != null) //no line of sight
-                {
-                    return false;
-                }
-            }
-            return true;
+            return HasLineOfSight(oldRow, oldCol, newRow, newCol, board);
         }
+
     }
 }

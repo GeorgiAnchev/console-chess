@@ -53,7 +53,7 @@ namespace Chess
             Piece piece = board[oldRow, oldCol];
             
             //No such piece or other player's piece
-            if (piece == null || piece.Player != PlayerOnTurn)
+            if (piece == null || piece.Owner != PlayerOnTurn)
             {
                 return MoveOutcome.Illegal;
             }
@@ -61,13 +61,14 @@ namespace Chess
             Piece targetPiece = board[newRow, newCol];
 
             //Can't take your own piece
-            if (targetPiece != null && targetPiece.Player == PlayerOnTurn)
+            if (targetPiece != null && targetPiece.Owner == PlayerOnTurn)
             {
                 return MoveOutcome.Illegal;
             }
 
             if (piece.CanMoveTo(oldRow, oldCol, newRow, newCol, this))
             {
+                //todo: exctract this in a new method
                 //move the piece
                 board[newRow, newCol] = piece;
                 board[oldRow, oldCol] = null;
@@ -92,6 +93,7 @@ namespace Chess
 
             if (currentPiece.CanAttackPosition(oldRow, oldCol, newRow, newCol, this))
             {
+                //todo: refactor moving a piece in a separate method
                 //move the piece
                 board[newRow, newCol] = currentPiece;
                 board[oldRow, oldCol] = null;
@@ -140,7 +142,7 @@ namespace Chess
 
                     if(board[i, j] != null)
                     {
-                        if (board[i, j].Player == Player.White) Console.ForegroundColor = ConsoleColor.White;
+                        if (board[i, j].Owner == Player.White) Console.ForegroundColor = ConsoleColor.White;
                         else Console.ForegroundColor = ConsoleColor.Black;
 
                         Console.Write($" {board[i, j]} ");

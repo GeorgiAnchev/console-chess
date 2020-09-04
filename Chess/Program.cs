@@ -32,7 +32,7 @@ namespace Chess
                 int newCol = int.Parse(input[1]);
 
                 MoveOutcome result;
-                if (Board[oldRow, oldCol] == null || Board[oldRow, oldCol].Player != Board.PlayerOnTurn)//can only move your own piece
+                if (Board[oldRow, oldCol] == null || Board[oldRow, oldCol].Owner != Board.PlayerOnTurn)//can only move your own piece
                 {
                     result = MoveOutcome.Illegal;
                 }
@@ -40,7 +40,7 @@ namespace Chess
                 {
                     result = Board.TryMove(oldRow, oldCol, newRow, newCol);
                 }
-                else if(Board[newRow, newCol].Player != Board.PlayerOnTurn)//try to take enemy piece
+                else if(Board[newRow, newCol].Owner != Board.PlayerOnTurn)//try to take enemy piece
                 {
                     result = Board.TryTake(oldRow, oldCol, newRow, newCol);
                 }

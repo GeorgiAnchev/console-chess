@@ -20,20 +20,10 @@ namespace Chess.Pieces
 
         public override bool CanMoveTo(int oldRow, int oldCol, int newRow, int newCol, Board board)
         {
-            if (board[newRow, newCol] != null && board[newRow, newCol].Player == Player)//cant take own peace
-            {
-                return false;
-            }
-
             int deltaRow = Math.Abs(oldRow - newRow);
             int deltaCol = Math.Abs(oldCol - newCol);
 
-            if ((deltaRow == 1 && deltaCol == 2) ||
-                (deltaRow == 2 && deltaCol == 1))
-            {
-                return true;
-            }
-            return false;
+            return (deltaRow == 1 && deltaCol == 2) || (deltaRow == 2 && deltaCol == 1);
         }
     }
 }
