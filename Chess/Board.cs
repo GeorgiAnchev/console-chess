@@ -50,10 +50,7 @@ namespace Chess
             
             if (piece.CanMoveTo(move, this))
             {
-                //todo: exctract this in a new method
-                //move the piece
-                board[move.NewRow, move.NewCol] = piece;
-                board[move.CurrentRow, move.CurrentCol] = null;
+                MovePiece(move);
 
                 return MoveOutcome.Success;
             }
@@ -61,17 +58,19 @@ namespace Chess
             return MoveOutcome.Illegal;
         }
 
+        private void MovePiece(Move move)
+        {
+            //todo include en passant logic here
+            TakePiece(move);
+        }
+
         public MoveOutcome TryTake(Move move)
         {
-
             Piece currentPiece = board[move.CurrentRow, move.CurrentCol];
 
             if (currentPiece.CanAttackPosition(move, this))
             {
-                //todo: refactor moving a piece in a separate method
-                //move the piece
-                board[move.NewRow, move.NewCol] = currentPiece;
-                board[move.CurrentRow, move.CurrentCol] = null;
+                TakePiece(move);
             }
             else
             {
@@ -79,6 +78,13 @@ namespace Chess
             }
 
             return MoveOutcome.Success;
+        }
+
+        private void TakePiece(Move move)
+        {
+            Piece piece = board[move.CurrentRow, move.CurrentCol];
+            board[move.NewRow, move.NewCol] = piece;
+            board[move.CurrentRow, move.CurrentCol] = null;
         }
 
         public void ChangeTurns()
