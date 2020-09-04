@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chess
 {
@@ -19,6 +15,8 @@ namespace Chess
 
         public void Run()
         {
+            Console.WriteLine();
+
             while (true)
             {
                 board.Print();
@@ -100,8 +98,7 @@ namespace Chess
 
         private Move GetUserInput()
         {
-            Console.WriteLine();
-            Console.WriteLine($"On turn is {board.PlayerOnTurn}");
+            Console.WriteLine($"{Environment.NewLine} On turn is {board.PlayerOnTurn}");
             Console.WriteLine("Enter coordinates of the piece to be moved:");
 
             string[] input;

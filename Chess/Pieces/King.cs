@@ -13,22 +13,22 @@ namespace Chess.Pieces
             DisplayCharacter = 'K';
         }
 
-        public override bool CanAttackPosition(int oldRow, int oldCol, int newRow, int newCol, Board board)
+        public override bool CanAttackPosition(Move move, Board board)
         {
-            return CanMoveTo(oldRow, oldCol, newRow, newCol, board);
+            return CanMoveTo(move, board);
         }
 
-        public override bool CanMoveTo(int currentRow, int currentCol, int newRow, int newCol, Board board)
+        public override bool CanMoveTo(Move move, Board board)
         {
-            int deltaRow = Math.Abs(newRow - currentRow);
-            int deltaCol = Math.Abs(newCol - currentCol);
+            int deltaRow = Math.Abs(move.NewRow - move.CurrentRow);
+            int deltaCol = Math.Abs(move.NewCol - move.CurrentCol);
 
             if (!isDistanceSmallEnough(deltaRow, deltaCol))
             {
                 return false;
             }
 
-            return IsPositionThreatened(newRow, newCol, board);
+            return IsPositionThreatened(move.NewRow, move.NewCol, board);
         }
 
         private bool IsPositionThreatened(int newRow, int newCol, Board board)
@@ -38,8 +38,9 @@ namespace Chess.Pieces
                 for (int col = 0; col < Board.boardSize; col++)
                 {
                     Piece potentialThreat = board[row, col];
+                    Move move = new Move(row, col, newRow, newCol);
 
-                    if (IsThreatenedBy(potentialThreat, row, col, newRow, newCol, board))
+                    if (IsThreatenedBy(potentialThreat, move, board))
                     {
                         return true;
                     }
@@ -48,21 +49,21 @@ namespace Chess.Pieces
             return false;
         }
 
-        private bool IsThreatenedBy(Piece potentialThreat, int currentRow, int currentCol, int newRow, int newCol, Board board)
+        private bool IsThreatenedBy(Piece potentialThreat, Move move, Board board)
         {
             if (potentialThreat != null && potentialThreat.Owner != Owner)
             {
                 if (potentialThreat is King)
                 {
-                    int rowDiffBetweenKings = Math.Abs(currentRow - newRow);
-                    int colDiffBetweenKings = Math.Abs(currentCol - newCol);
+                    int rowDiffBetweenKings = Math.Abs(move.CurrentRow - move.NewRow);//todo: exctract this logic in Move
+                    int colDiffBetweenKings = Math.Abs(move.CurrentCol - move.NewCol);
 
                     if (isDistanceSmallEnough(rowDiffBetweenKings, colDiffBetweenKings))
                     {
                         return true;
                     }
                 }
-                else if (potentialThreat.CanAttackPosition(currentRow, currentCol, newRow, newCol, board))
+                else if (potentialThreat.CanAttackPosition(move, board))
                 {
                     return true;
                 }

@@ -48,7 +48,7 @@ namespace Chess
         {
             Piece piece = board[move.CurrentRow, move.CurrentCol];
             
-            if (piece.CanMoveTo(move.CurrentRow, move.CurrentCol, move.NewRow, move.NewCol, this))
+            if (piece.CanMoveTo(move, this))
             {
                 //todo: exctract this in a new method
                 //move the piece
@@ -66,7 +66,7 @@ namespace Chess
 
             Piece currentPiece = board[move.CurrentRow, move.CurrentCol];
 
-            if (currentPiece.CanAttackPosition(move.CurrentRow, move.CurrentCol, move.NewRow, move.NewCol, this))
+            if (currentPiece.CanAttackPosition(move, this))
             {
                 //todo: refactor moving a piece in a separate method
                 //move the piece
@@ -101,8 +101,7 @@ namespace Chess
 
         public void Print()
         {
-            Console.WriteLine();
-            Console.WriteLine("    0  1  2  3  4  5  6  7");
+            Console.WriteLine($"{Environment.NewLine}    0  1  2  3  4  5  6  7");
 
             for (int i = 0; i < boardSize; i++)
             {

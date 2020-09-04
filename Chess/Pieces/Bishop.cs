@@ -13,22 +13,22 @@ namespace Chess.Pieces
             DisplayCharacter = 'B';
         }
 
-        public override bool CanAttackPosition(int oldRow, int oldCol, int newRow, int newCol, Board board)
+        public override bool CanAttackPosition(Move move, Board board)
         {
-            return CanMoveTo(oldRow, oldCol, newRow, newCol, board);
+            return CanMoveTo(move, board);
         }
 
-        public override bool CanMoveTo(int oldRow, int oldCol, int newRow, int newCol, Board board)
+        public override bool CanMoveTo(Move move, Board board)
         {
-            int rowDifference = Math.Abs(newRow - oldRow);
-            int colDifference = Math.Abs(newCol - oldCol);
+            int rowDifference = Math.Abs(move.NewRow - move.CurrentRow);
+            int colDifference = Math.Abs(move.NewCol - move.CurrentCol);
 
             if (!IsOnSameDiagonal(rowDifference, colDifference))
             {
                 return false;
             }
 
-            return HasLineOfSight(oldRow, oldCol, newRow, newCol, board);
+            return HasLineOfSight(move, board);
         }
 
     }

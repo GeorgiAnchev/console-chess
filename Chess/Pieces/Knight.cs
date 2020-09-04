@@ -13,15 +13,15 @@ namespace Chess.Pieces
             DisplayCharacter = 'H';
         }
 
-        public override bool CanAttackPosition(int oldRow, int oldCol, int newRow, int newCol, Board board)
+        public override bool CanAttackPosition(Move move, Board board)
         {
-            return CanMoveTo(oldRow, oldCol, newRow, newCol, board);
+            return CanMoveTo(move, board);
         }
 
-        public override bool CanMoveTo(int oldRow, int oldCol, int newRow, int newCol, Board board)
+        public override bool CanMoveTo(Move move, Board board)
         {
-            int deltaRow = Math.Abs(oldRow - newRow);
-            int deltaCol = Math.Abs(oldCol - newCol);
+            int deltaRow = Math.Abs(move.CurrentRow - move.NewRow);
+            int deltaCol = Math.Abs(move.CurrentCol - move.NewCol);
 
             return (deltaRow == 1 && deltaCol == 2) || (deltaRow == 2 && deltaCol == 1);
         }

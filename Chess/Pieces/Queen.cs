@@ -9,15 +9,15 @@ namespace Chess.Pieces
             DisplayCharacter = 'Q';
         }
 
-        public override bool CanAttackPosition(int oldRow, int oldCol, int newRow, int newCol, Board board)
+        public override bool CanAttackPosition(Move move, Board board)
         {
-            return CanMoveTo(oldRow, oldCol, newRow, newCol, board);
+            return CanMoveTo(move, board);
         }
 
-        public override bool CanMoveTo(int currentRow, int currentCol, int newRow, int newCol, Board board)
+        public override bool CanMoveTo(Move move, Board board)
         {
-            int rowDiff = Math.Abs(newRow - currentRow);
-            int colDiff = Math.Abs(newCol - currentCol);
+            int rowDiff = Math.Abs(move.NewRow - move.CurrentRow);
+            int colDiff = Math.Abs(move.NewCol - move.CurrentCol);
 
             if (!IsOnSameDiagonal(rowDiff, colDiff)
                 && !IsOnSameRow(rowDiff, colDiff)
@@ -26,7 +26,7 @@ namespace Chess.Pieces
                 return false;
             }
 
-            return HasLineOfSight(currentRow, currentCol, newRow, newCol, board);
+            return HasLineOfSight(move, board);
         }
     }
 }

@@ -9,16 +9,16 @@ namespace Chess.Pieces
             DisplayCharacter = 'P';
         }
 
-        public override bool CanAttackPosition(int currentRow, int currentCol, int newRow, int newCol, Board board)
+        public override bool CanAttackPosition(Move move, Board board)
         {
-            int colDiff = Math.Abs(newCol - currentCol);
+            int colDiff = Math.Abs(move.NewCol - move.CurrentCol);
 
-            if (Owner == Player.Black && CanAttackDownwards(currentRow, newRow, colDiff))
+            if (Owner == Player.Black && CanAttackDownwards(move.CurrentRow, move.NewRow, colDiff))
             {
                 return true;
             }
 
-            if (Owner == Player.White && CanAttackUpwards(currentRow, newRow, colDiff))
+            if (Owner == Player.White && CanAttackUpwards(move.CurrentRow, move.NewRow, colDiff))
             {
                 return true;
             }
@@ -26,21 +26,21 @@ namespace Chess.Pieces
             return false;
         }
 
-        public override bool CanMoveTo(int currentRow, int currentCol, int newRow, int newCol, Board board)
+        public override bool CanMoveTo(Move move, Board board)
         {
-            int colDiff = Math.Abs(newCol - currentCol);
+            int colDiff = Math.Abs(move.NewCol - move.CurrentCol);
 
             //todo: implement promotion, en passant
             if (Owner == Player.Black
-                && (CanMoveDownwards(currentRow, newRow, colDiff)
-                    || CanDoubleMoveDownwards(currentRow, newRow, currentCol, colDiff, board)))
+                && (CanMoveDownwards(move.CurrentRow, move.NewRow, colDiff)
+                    || CanDoubleMoveDownwards(move, board)))
             {
                 return true;
             }
 
             if (Owner == Player.White
-                && (CanMoveUpwards(currentRow, newRow, colDiff)
-                   || CanDoubleMoveUpwards(currentRow, newRow, currentCol, colDiff, board)))
+                && (CanMoveUpwards(move.CurrentRow, move.NewRow, colDiff)
+                   || CanDoubleMoveUpwards(move, board)))
             {
                 return true;
             }
@@ -68,20 +68,20 @@ namespace Chess.Pieces
             return newRow == currentRow + 1 && colDiff == 0;
         }
 
-        private static bool CanDoubleMoveUpwards(int currentRow, int newRow, int currentCol,  int colDiff, Board board)
+        private static bool CanDoubleMoveUpwards(Move move, Board board)
         {
-            return currentRow == 6
-                && newRow == currentRow - 2
-                && colDiff == 0
-                && board[currentRow - 1, currentCol] == null;
+            return move.CurrentRow == 6
+                && move.NewRow == move.CurrentRow - 2
+                && move.ColDiff() == 0
+                && board[move.CurrentRow - 1, move.CurrentCol] == null;
         }
 
-        private static bool CanDoubleMoveDownwards(int currentRow, int newRow,int currentCol, int colDiff, Board board)
+        private static bool CanDoubleMoveDownwards(Move move, Board board)
         {
-            return currentRow == 1
-                && newRow == currentRow + 2
-                && colDiff == 0
-                && board[currentRow + 1, currentCol] == null;
+            return move.CurrentRow == 1
+                && move.NewRow == move.CurrentRow + 2
+                && move.ColDiff() == 0
+                && board[move.CurrentRow + 1, move.CurrentCol] == null;
         }
     }
 }

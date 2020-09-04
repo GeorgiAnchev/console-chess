@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace Chess
 {
     public struct Move
@@ -18,6 +20,9 @@ namespace Chess
         public int NewRow { get; }
 
         public int NewCol { get; }
-
+        public int ColDiff()
+        {
+            return Math.Abs(NewCol - CurrentCol);
+        }
     }
 }

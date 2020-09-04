@@ -20,9 +20,9 @@ namespace Chess
             protected set; 
         }
         
-        public abstract bool CanMoveTo(int oldRow, int oldCol, int newRow, int newCol, Board board);
+        public abstract bool CanMoveTo(Move move, Board board);
 
-        public abstract bool CanAttackPosition(int oldRow, int oldCol, int newRow, int newCol, Board board);
+        public abstract bool CanAttackPosition(Move move, Board board);
 
         protected static bool IsOnSameDiagonal(int rowDiff, int colDiff)
         {
@@ -39,15 +39,21 @@ namespace Chess
             return rowDiff != 0 && colDiff == 0;
         }
 
-        protected static bool HasLineOfSight(int currentRow, int currentCol, int newRow, int newCol, Board board)
+        protected static bool HasLineOfSight(Move move, Board board)
         {
-            int directionRow = Math.Sign(newRow - currentRow);
-            int directionCol = Math.Sign(newCol - currentCol);
-            int numberOfSteps = Math.Max(Math.Abs(newRow - currentRow), Math.Abs(newCol - currentCol));
+            int rowDelta = move.NewRow - move.CurrentRow;
+            int colDelta = move.NewCol - move.CurrentCol;
+
+            int directionRow = Math.Sign(rowDelta);
+            int directionCol = Math.Sign(colDelta);
+            int numberOfSteps = Math.Max(Math.Abs(rowDelta), Math.Abs(colDelta));
 
             for (int i = 1; i < numberOfSteps; i++)
             {
-                if (board[currentRow + i * directionRow, currentCol + i * directionCol] != null)
+                int row = move.CurrentRow + i * directionRow;
+                int col = move.CurrentCol + i * directionCol;
+
+                if (board[row, col] != null)
                 {
                     return false;
                 }
