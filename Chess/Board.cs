@@ -44,59 +44,34 @@ namespace Chess
             }
         }
 
-        public MoveOutcome TryMove(int oldRow, int oldCol, int newRow, int newCol)
+        public MoveOutcome TryMove(Move move)
         {
-            if (newRow < 0 || newCol < 0 || newRow > 7 || newCol > 7)
-            {
-                return MoveOutcome.Illegal;
-            }
-            Piece piece = board[oldRow, oldCol];
+            Piece piece = board[move.CurrentRow, move.CurrentCol];
             
-            //No such piece or other player's piece
-            if (piece == null || piece.Owner != PlayerOnTurn)
-            {
-                return MoveOutcome.Illegal;
-            }
-
-            Piece targetPiece = board[newRow, newCol];
-
-            //Can't take your own piece
-            if (targetPiece != null && targetPiece.Owner == PlayerOnTurn)
-            {
-                return MoveOutcome.Illegal;
-            }
-
-            if (piece.CanMoveTo(oldRow, oldCol, newRow, newCol, this))
+            if (piece.CanMoveTo(move.CurrentRow, move.CurrentCol, move.NewRow, move.NewCol, this))
             {
                 //todo: exctract this in a new method
                 //move the piece
-                board[newRow, newCol] = piece;
-                board[oldRow, oldCol] = null;
-            }
-            else
-            {
-                return MoveOutcome.Illegal;
+                board[move.NewRow, move.NewCol] = piece;
+                board[move.CurrentRow, move.CurrentCol] = null;
+
+                return MoveOutcome.Success;
             }
 
-
-            return MoveOutcome.Success;
+            return MoveOutcome.Illegal;
         }
 
-        public MoveOutcome TryTake(int oldRow, int oldCol, int newRow, int newCol)
+        public MoveOutcome TryTake(Move move)
         {
-            if (newRow < 0 || newCol < 0 || newRow > 7 || newCol > 7)
-            {
-                return MoveOutcome.Illegal;
-            }
 
-            Piece currentPiece = board[oldRow, oldCol];
+            Piece currentPiece = board[move.CurrentRow, move.CurrentCol];
 
-            if (currentPiece.CanAttackPosition(oldRow, oldCol, newRow, newCol, this))
+            if (currentPiece.CanAttackPosition(move.CurrentRow, move.CurrentCol, move.NewRow, move.NewCol, this))
             {
                 //todo: refactor moving a piece in a separate method
                 //move the piece
-                board[newRow, newCol] = currentPiece;
-                board[oldRow, oldCol] = null;
+                board[move.NewRow, move.NewCol] = currentPiece;
+                board[move.CurrentRow, move.CurrentCol] = null;
             }
             else
             {
