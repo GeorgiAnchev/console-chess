@@ -15,7 +15,7 @@ namespace Chess
 
         public Board()
         {
-            board = new Piece[8, 8];
+            board = new Piece[boardSize, boardSize];
 
             board[0, 0] = new Rook(Player.Black);
             board[0, 1] = new Knight(Player.Black);

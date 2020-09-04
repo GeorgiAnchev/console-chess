@@ -16,8 +16,8 @@ namespace Chess.Pieces
 
         public override bool CanMoveTo(Move move, Board board)
         {
-            if (!IsOnSameRow(move.RowDiff(), move.ColDiff())
-                && !IsOnSameCol(move.RowDiff(), move.ColDiff()))
+            if (!IsOnSameRow(move.RowDiff, move.ColDiff)
+                && !IsOnSameCol(move.RowDiff, move.ColDiff))
             {
                 return false;
             }

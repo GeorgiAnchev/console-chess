@@ -4,6 +4,9 @@ namespace Chess.Pieces
 {
     class Pawn: Piece
     {
+        private const int startingPawnRowWhite = 1;
+        private const int startingPawnRowBlack = 6;
+
         public Pawn(Player player) : base(player)
         {
             DisplayCharacter = 'P';
@@ -66,7 +69,7 @@ namespace Chess.Pieces
 
         private static bool CanDoubleMoveUpwards(Move move, Board board)
         {
-            return move.CurrentRow == 6
+            return move.CurrentRow == startingPawnRowBlack
                 && move.NewRow == move.CurrentRow - 2
                 && move.ColDiff == 0
                 && board[move.CurrentRow - 1, move.CurrentCol] == null;
@@ -74,9 +77,9 @@ namespace Chess.Pieces
 
         private static bool CanDoubleMoveDownwards(Move move, Board board)
         {
-            return move.CurrentRow == 1
+            return move.CurrentRow == startingPawnRowWhite
                 && move.NewRow == move.CurrentRow + 2
-                && move.ColDiff() == 0
+                && move.ColDiff == 0
                 && board[move.CurrentRow + 1, move.CurrentCol] == null;
         }
     }
